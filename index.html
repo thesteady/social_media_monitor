@@ -1,0 +1,47 @@
+<html lang="en">
+  <head>
+    <meta charset = "UTF-8">
+    <script src="./bower_components/nio.js/dist/nio.min.js"></script>
+    <title>Social Media Monitor</title>
+  </head>
+  <body>
+    <h1>Social Media Monitor</h1>
+    <div id="twitter"></div>
+    <div id="instagram"></div>
+
+    <script>
+      var twitterCounts = [];
+      var instagramCounts = []
+      function updateTwitterCount(count) {
+        twitterCounts.push(count);
+        document.getElementById('twitter').innerHTML = twitterCounts.join(" ")
+      }
+
+      function updateInstagramCount(count) {
+        instagramCounts.push(count);
+        document.getElementById('instagram').innerHTML = instagramCounts.join(" ")
+      }
+
+      var firehose = nio.source.socketio("http://brand.nioinstances.com",
+        // ["count_by_time"] // count per sec, min, hour
+        ["count_by_network"] // twitter + instagram counts
+        ,120 //immediately streams last 120s of cached data
+      ).pipe(nio.func(function(chunk) {
+            chunk.count_per_sec = parseInt(chunk.count_per_sec, 10)
+        });
+
+      var twitterStream = firehose.pipe(nio.is('type', 'twitter'))
+        .pipe(nio.pass(function(chunk) {
+          console.log('twitter chunk:', chunk)
+          updateTwitterCount(chunk.count_per_sec)
+        }));
+
+      var instaStream = firehose.pipe(nio.is('type', 'instagram'))
+        .pipe(nio.pass(function(chunk) {
+          console.log('insta chunk:', chunk)
+          updateInstagramCount(chunk.count_per_sec)
+        }));
+
+    </script>
+  </body>
+</html>
