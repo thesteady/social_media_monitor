@@ -1,0 +1,42 @@
+body {
+  font-family: 'Work Sans', sans-serif;
+  padding: 20px 40px;
+}
+h1 {
+  text-align: center;
+}
+#twitter {
+  border: 1px solid blue;
+  display: inline-block;
+  width: 500px;
+}
+#instagram {
+  border: 1px solid green;
+  display: inline-block;
+  width: 500px;
+}
+#twitter img {
+  height: 50px;
+  width: auto;
+}
+#instagram img{
+  /* adjust for difference in logo padding internal to png */
+  height: 30px;
+  padding: 10px;
+  width: auto;
+}
+#twitter-sparkline {
+  display: inline-block;
+  /*margin-left: 40px;*/
+}
+#twitter-sparkline .data-line {
+  stroke: #55acee;
+}
+#instagram-sparkline {
+  display: inline-block;
+  /*margin-left: 40px;*/
+  width: 500px;
+}
+#instagram-sparkline .data-line {
+  stroke: black;
+}

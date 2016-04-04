@@ -4,51 +4,8 @@
     <script src="./bower_components/nio.js/dist/nio.min.js"></script>
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <link href='https://fonts.googleapis.com/css?family=Work+Sans' rel='stylesheet' type='text/css'>
+    <link href='/styles/styles.css' rel='stylesheet' type='text/css'>
     <title>Social Media Monitor</title>
-    <style>
-      body {
-        font-family: 'Work Sans', sans-serif;
-        padding: 20px 40px;
-      }
-      h1 {
-        text-align: center;
-      }
-      #twitter {
-        border: 1px solid blue;
-        display: inline-block;
-        width: 500px;
-      }
-      #instagram {
-        border: 1px solid green;
-        display: inline-block;
-        width: 500px;
-      }
-      #twitter img {
-        height: 50px;
-        width: auto;
-      }
-      #instagram img{
-        /* adjust for difference in logo padding internal to png */
-        height: 30px;
-        padding: 10px;
-        width: auto;
-      }
-      #twitter-sparkline {
-        display: inline-block;
-        /*margin-left: 40px;*/
-      }
-      #twitter-sparkline .data-line {
-        stroke: #55acee;
-      }
-      #instagram-sparkline {
-        display: inline-block;
-        /*margin-left: 40px;*/
-        width: 500px;
-      }
-      #instagram-sparkline .data-line {
-        stroke: black;
-      }
-    </style>
   </head>
   <body>
     <h1>Social Media Monitor</h1>
@@ -165,7 +122,7 @@
           updateInstagramCount(chunk.count_per_sec)
         }));
 
-      var twitterSparkLine = makeSparkLine(twitterCounts,'#twitter-sparkline', 100),
+      var twitterSparkLine = makeSparkLine(twitterCounts,'#twitter-sparkline', 60),
           instagramSparkLine = makeSparkLine(instagramCounts, '#instagram-sparkline', 100);
     </script>
   </body>
