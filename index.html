@@ -16,6 +16,7 @@
         </div>
         <div id="twitter-sparkline"></div>
         <p>Tweets per second</p>
+        <p id="twitter-avg"></p>
       </div>
       <div id="instagram">
         <div class="logo-wrapper">
@@ -23,12 +24,15 @@
         </div>
         <div id="instagram-sparkline"></div>
         <p>Instagram posts per second</p>
+        <p id="instagram-avg"></p>
       </div>
     </div>
 
     <script>
       // This variable is for both twitter and instragram sparklines.:
       var maxPoints = 120,
+      twitterAvg,
+      instagramAvg,
       twitterCounts = [],
       instagramCounts = [];
 
@@ -100,13 +104,45 @@
         }
       }
 
-      function updateTwitterCount(count) {
+      function updateTwitterAverage() {
+        var twitterSum,
+            statement;
+
+        if(twitterCounts.length < 3) {
+          //not enough data yet, don't calculate an average;
+          twitterAvg = null
+        } else {
+          twitterSum = twitterCounts.reduce(function(a,b) { return a + b })
+          twitterAvg = parseInt(twitterSum / twitterCounts.length, 10)
+          statement = ["Averaging", twitterAvg, "tweets per second"].join(" ");
+          document.getElementById('twitter-avg').innerHTML = statement;
+        }
+      }
+
+      function updateInstagramAverage() {
+        var instaSum,
+            statement;
+
+        if(instagramCounts.length < 3) {
+          //not enough data yet, don't calculate an average;
+          instagramAvg = null
+        } else {
+          instaSum = instagramCounts.reduce(function(a,b) { return a + b })
+          instagramAvg = parseInt(instaSum / instagramCounts.length, 10)
+          statement = ["Averaging", instagramAvg, "tweets per second"].join(" ");
+          document.getElementById('instagram-avg').innerHTML = statement;
+        }
+      }
+
+      function updateTwitter(count) {
         twitterCounts.push(count);
+        updateTwitterAverage();
         updateSparkLine(twitterCounts, twitterSparkLine);
       }
 
-      function updateInstagramCount(count) {
+      function updateInstagram(count) {
         instagramCounts.push(count);
+        updateInstagramAverage();
         updateSparkLine(instagramCounts, instagramSparkLine);
       }
 
@@ -121,12 +157,12 @@
 
       var twitterStream = countsByNetworkStream.pipe(nio.is('type', 'twitter'))
         .pipe(nio.pass(function(chunk) {
-          updateTwitterCount(chunk.count_per_sec)
+          updateTwitter(chunk.count_per_sec)
         }));
 
       var instaStream = countsByNetworkStream.pipe(nio.is('type', 'instagram'))
         .pipe(nio.pass(function(chunk) {
-          updateInstagramCount(chunk.count_per_sec)
+          updateInstagram(chunk.count_per_sec)
         }));
 
       var twitterSparkLine = makeSparkLine(twitterCounts,'#twitter-sparkline', 0, 100),
