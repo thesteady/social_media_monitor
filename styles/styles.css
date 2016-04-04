@@ -4,38 +4,43 @@ body {
 }
 h1 {
   text-align: center;
+  border-bottom: 2px solid #a4acba;
 }
-#twitter {
-  border: 1px solid blue;
+p {
+  color: #464f5d;
+  font-style: italic;
+  margin: 0;
+  text-align: center;
+}
+#twitter,
+#instagram {
   display: inline-block;
   width: 500px;
 }
 #instagram {
-  border: 1px solid green;
+  float: right;
+}
+.logo-wrapper {
+  bottom: 80px;
   display: inline-block;
-  width: 500px;
+  position: relative;
 }
 #twitter img {
-  height: 50px;
+  height: 45px;
   width: auto;
 }
 #instagram img{
   /* adjust for difference in logo padding internal to png */
-  height: 30px;
+  height: 25px;
   padding: 10px;
   width: auto;
 }
-#twitter-sparkline {
+#twitter-sparkline,
+#instagram-sparkline {
   display: inline-block;
-  /*margin-left: 40px;*/
 }
 #twitter-sparkline .data-line {
   stroke: #55acee;
-}
-#instagram-sparkline {
-  display: inline-block;
-  /*margin-left: 40px;*/
-  width: 500px;
 }
 #instagram-sparkline .data-line {
   stroke: black;

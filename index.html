@@ -9,14 +9,21 @@
   </head>
   <body>
     <h1>Social Media Monitor</h1>
-    <div id="twitter">
-      <img src="assets/twitter_logo.png" />
-      <div id="twitter-sparkline"></div>
-    </div>
-
-    <div id="instagram">
-      <img src="assets/instagram_logo.png" />
-      <div id="instagram-sparkline"></div>
+    <div class="sparks-container">
+      <div id="twitter">
+        <div class="logo-wrapper">
+          <img src="assets/twitter_logo.png" />
+        </div>
+        <div id="twitter-sparkline"></div>
+        <p>Tweets per second</p>
+      </div>
+      <div id="instagram">
+        <div class="logo-wrapper">
+          <img src="assets/instagram_logo.png" />
+        </div>
+        <div id="instagram-sparkline"></div>
+        <p>Instagram posts per second</p>
+      </div>
     </div>
 
     <script>
@@ -25,14 +32,14 @@
       twitterCounts = [],
       instagramCounts = [];
 
-      function makeSparkLine(data, containerId, max) {
-        var margin = {top: 40, right: 40, bottom: 40, left: 40},
-        outerWidth = 450,
+      function makeSparkLine(data, containerId, minY, maxY) {
+        var margin = {top: 20, right: 40, bottom: 20, left: 40},
+        outerWidth = 445,
         outerHeight = 200,
         width  = outerWidth - margin.left - margin.right,
         height = outerHeight - margin.top - margin.bottom,
 
-        yScale = d3.scale.linear().domain([0, max]).range([height, 0]),
+        yScale = d3.scale.linear().domain([minY, maxY]).range([height, 0]),
         xScale = d3.scale.linear().domain([0, maxPoints]).range([0, width]),
 
         svg = d3.select(containerId).append("svg")
@@ -104,11 +111,11 @@
       }
 
       var countsByNetworkStream = nio.source.socketio("http://brand.nioinstances.com",
-        ["count_by_network"] // twitter, instagram counts
+        ["count_by_network"],// twitter, instagram counts
+        120
       ).pipe(nio.func(function(chunk) {
         // parse the count/sec to an Integer.
         chunk.count_per_sec = parseInt(chunk.count_per_sec, 10);
-
         return chunk;
       }));
 
@@ -122,8 +129,8 @@
           updateInstagramCount(chunk.count_per_sec)
         }));
 
-      var twitterSparkLine = makeSparkLine(twitterCounts,'#twitter-sparkline', 60),
-          instagramSparkLine = makeSparkLine(instagramCounts, '#instagram-sparkline', 100);
+      var twitterSparkLine = makeSparkLine(twitterCounts,'#twitter-sparkline', 0, 100),
+          instagramSparkLine = makeSparkLine(instagramCounts, '#instagram-sparkline', 0, 100);
     </script>
   </body>
 </html>
